@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -33,10 +33,6 @@ public class CustomerController {
         this.factory = factory;
     }
 
-    private Stream<Customer> asStream(Spliterator<Customer> customers) {
-        return StreamSupport.stream(customers, false);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDto> findById(@PathVariable("id") long id) {
         Optional<Customer> found = repository.findById(id);
@@ -49,10 +45,26 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<CustomerDto> findAll() {
-        return asStream(repository.findAll().spliterator())
+    public List<CustomerDto> findAllBy(@RequestParam(required = false) String search) {
+        return asCustomerDtos(findAllCustomersBy(search));
+    }
+
+    private Stream<Customer> findAllCustomersBy(String search) {
+        if (search != null) {
+            return repository.findAllByNameContaining(search).stream();
+        } else {
+            return StreamSupport.stream(repository.findAll().spliterator(), false);
+        }
+    }
+
+    private List<CustomerDto> asCustomerDtos(Stream<Customer> customers) {
+        return customers
                 .map(Customer::asDto)
                 .collect(toList());
+    }
+
+    private Stream<Customer> asStream(Iterable<Customer> customers) {
+        return StreamSupport.stream(customers.spliterator(), false);
     }
 
     @PostMapping
