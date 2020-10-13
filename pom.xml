@@ -18,6 +18,7 @@
     <modules>
         <module>customer-service</module>
         <module>warehouse-service</module>
+        <module>end-to-end-testing</module>
     </modules>
 
     <properties>
