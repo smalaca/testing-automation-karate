@@ -1,6 +1,6 @@
 package com.smalaca.orderingservice.infrastructure.web.rest.offer;
 
-import com.smalaca.orderingservice.infrastructure.warehouse.ItemDto;
+import com.smalaca.orderingservice.infrastructure.warehouseservice.ItemDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

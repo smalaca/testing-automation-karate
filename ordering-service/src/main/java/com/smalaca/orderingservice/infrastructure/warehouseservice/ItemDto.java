@@ -1,4 +1,4 @@
-package com.smalaca.orderingservice.infrastructure.warehouse;
+package com.smalaca.orderingservice.infrastructure.warehouseservice;
 
 public class ItemDto {
     private Long id;

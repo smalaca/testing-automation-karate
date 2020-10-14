@@ -2,8 +2,8 @@ package com.smalaca.orderingservice.infrastructure.web.rest.favourites;
 
 import com.smalaca.orderingservice.domain.favourite.Favourite;
 import com.smalaca.orderingservice.infrastructure.persistency.jpa.JpaFavouriteRepository;
-import com.smalaca.orderingservice.infrastructure.warehouse.ItemDto;
-import com.smalaca.orderingservice.infrastructure.warehouse.WarehouseRestClient;
+import com.smalaca.orderingservice.infrastructure.warehouseservice.ItemDto;
+import com.smalaca.orderingservice.infrastructure.warehouseservice.WarehouseServiceRestClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +19,11 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/favourites")
 public class FavouritesController {
     private final JpaFavouriteRepository repository;
-    private final WarehouseRestClient warehouseRestClient;
+    private final WarehouseServiceRestClient warehouseServiceRestClient;
 
-    public FavouritesController(JpaFavouriteRepository repository, WarehouseRestClient warehouseRestClient) {
+    public FavouritesController(JpaFavouriteRepository repository, WarehouseServiceRestClient warehouseServiceRestClient) {
         this.repository = repository;
-        this.warehouseRestClient = warehouseRestClient;
+        this.warehouseServiceRestClient = warehouseServiceRestClient;
     }
 
     @GetMapping("/{customerId}")
@@ -32,7 +32,7 @@ public class FavouritesController {
         List<Favourite> favourites = repository.findAllByCustomerId(customerId);
 
         return favourites.stream()
-                .map(favourite -> warehouseRestClient.getItemDto(favourite.getItemId()))
+                .map(favourite -> warehouseServiceRestClient.getItemDto(favourite.getItemId()))
                 .collect(toList());
     }
 

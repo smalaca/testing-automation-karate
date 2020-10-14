@@ -1,13 +1,13 @@
-package com.smalaca.orderingservice.infrastructure.warehouse;
+package com.smalaca.orderingservice.infrastructure.warehouseservice;
 
 import org.springframework.web.client.RestTemplate;
 
-public class WarehouseRestClient {
+public class WarehouseServiceRestClient {
     private static final String URL = "http://localhost:8200";
 
     private final RestTemplate restTemplate;
 
-    WarehouseRestClient(RestTemplate restTemplate) {
+    WarehouseServiceRestClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
