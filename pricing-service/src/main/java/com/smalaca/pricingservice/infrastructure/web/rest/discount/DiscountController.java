@@ -47,13 +47,8 @@ public class DiscountController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        repository.deleteById(id);
-    }
-
-    @DeleteMapping
-    public void deleteAll() {
-        repository.deleteAll();
+    @DeleteMapping("/{customerId}")
+    public void deleteAllFor(@PathVariable Long customerId) {
+        repository.deleteAllByCustomerId(customerId);
     }
 }
