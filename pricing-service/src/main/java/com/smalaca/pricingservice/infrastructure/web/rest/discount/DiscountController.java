@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/discount")
 public class DiscountController {
@@ -23,7 +25,7 @@ public class DiscountController {
 
     @GetMapping("/{customerId}/{price}")
     public ResponseEntity<PriceDto> getPriceFor(@PathVariable long customerId, @PathVariable double price) {
-        Discount discount = repository.findById(customerId)
+        Discount discount = repository.findByCustomerId(customerId)
                 .orElseGet(Discount::noDiscount);
 
         return ResponseEntity.ok(discount.applyTo(price));
@@ -31,9 +33,18 @@ public class DiscountController {
 
     @PostMapping
     public ResponseEntity<Long> createDiscount(@RequestBody DiscountDto discountDto) {
-        Discount discount = new Discount(discountDto.getCustomerId(), discountDto.getPercentage());
+        Optional<Discount> found = repository.findByCustomerId(discountDto.getCustomerId());
 
-        return ResponseEntity.ok(repository.save(discount).id());
+        if (found.isPresent()) {
+            Discount discount = found.get();
+            discount.changePercentage(discountDto.getPercentage());
+            repository.save(discount);
+
+            return ResponseEntity.ok(discount.id());
+        } else {
+            Discount discount = new Discount(discountDto.getCustomerId(), discountDto.getPercentage());
+            return ResponseEntity.ok(repository.save(discount).id());
+        }
     }
 
     @DeleteMapping("/{id}")

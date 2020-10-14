@@ -25,6 +25,10 @@ public class Discount {
         return NO_DISCOUNT;
     }
 
+    public void changePercentage(int percentage) {
+        this.percentage = percentage;
+    }
+
     public PriceDto applyTo(double price) {
         if (percentage != 0) {
             return new PriceDto(withDiscount(price));
