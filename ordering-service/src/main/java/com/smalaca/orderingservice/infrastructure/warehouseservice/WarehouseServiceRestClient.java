@@ -1,6 +1,9 @@
 package com.smalaca.orderingservice.infrastructure.warehouseservice;
 
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 
 public class WarehouseServiceRestClient {
     private final RestTemplate restTemplate;
@@ -11,7 +14,11 @@ public class WarehouseServiceRestClient {
         this.url = url;
     }
 
-    public ItemDto getItemDto(Long id) {
-        return restTemplate.getForObject(url + "/item/" + id, ItemDto.class);
+    public Optional<ItemDto> getItemDto(Long id) {
+        try {
+            return Optional.of(restTemplate.getForObject(url + "/item/" + id, ItemDto.class));
+        } catch (HttpClientErrorException.NotFound notFound) {
+            return Optional.empty();
+        }
     }
 }
