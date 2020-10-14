@@ -8,7 +8,7 @@ public class ItemDto {
 
     public ItemDto() {}
 
-    private ItemDto(Long id, String name, int price, String currency) {
+    private ItemDto(Long id, String name, double price, String currency) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -17,6 +17,10 @@ public class ItemDto {
 
     public static ItemDto notFound(Long itemId) {
         return new ItemDto(itemId, "NOT FOUND", 0, "PLN");
+    }
+
+    public ItemDto withPrice(double price) {
+        return new ItemDto(id, name, price, currency);
     }
 
     public Long getId() {
